@@ -15,9 +15,9 @@ const refreshTokenService = require('../services/refreshTokenService');
 /** Validations */
 const oauth2V1Validation = require('../validations/oauth2V1Validation');
 /** Utility */
-const {addHours} = require('../../../utils/date/date_functions');
-const { generateRandomCode } = require('../../../utils/generators/generate_random_code');
-const { encryptSHA256 } = require('../../../utils/encryptions/encrypt');
+const {addHours} = require('../../../utils/date-util');
+const { generateRandomCode } = require('../../../utils/code-generate-util');
+const { encryptSHA256 } = require('../../../utils/encryption-util');
 let self = {};
 
 /** Register */

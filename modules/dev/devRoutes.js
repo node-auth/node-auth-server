@@ -1,5 +1,5 @@
 const express = require('express');
-const { encryptSHA256 } = require('../../utils/encryptions/encrypt');
+const { encryptSHA256 } = require('../../utils/encryption-util');
 const { validateAPIKEY } = require('./devMiddleware');
 /** Services */
 const permissionService = require('../auth/services/permissionService');

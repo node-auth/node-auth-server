@@ -12,9 +12,9 @@ const refreshTokenService = require('../services/refreshTokenService');
 /** Validations */
 const authValidation = require('../validations/authValidation');
 /** Utility */
-const {addHours} = require('../../../utils/date/date_functions');
-const { generateRandomCode, generateTOTP, verifyOTP } = require('../../../utils/generators/generate_random_code');
-const { encryptSHA256 } = require('../../../utils/encryptions/encrypt');
+const {addHours} = require('../../../utils/date-util');
+const { generateRandomCode, generateTOTP, verifyOTP } = require('../../../utils/code-generate-util');
+const { encryptSHA256 } = require('../../../utils/encryption-util');
 
 let self = {};
 
