@@ -11,6 +11,18 @@ self.createRole = async (data) => {
     }
 }
 
+/** Update rple */
+self.updateRole = async (data) => {
+    try {
+        return await Role.update(
+            data,
+            { where: { role_id: data['role_id'] }}
+        );
+    } catch(err) {
+        throw err;
+    }
+}
+
 /** Get role by id */
 self.getRoleById = async (id) => {
     try {
