@@ -29,6 +29,19 @@ self.getUserRolesByUserId = async (user_id) => {
     }
 }
 
+/** Delete user role by user id */
+self.deleteUserRoleByUserId = async (id) => {
+    try {
+        return await UserRole.destroy({
+            where: {
+                user_id: id
+            }
+        })
+    } catch(err) {
+        throw err;
+    }
+}
+
 /** Delete user role by id */
 self.deleteUserRoleById = async (id) => {
     try {

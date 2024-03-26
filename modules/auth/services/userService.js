@@ -11,6 +11,18 @@ self.createUser = async (userData) => {
     }
 }
 
+/** Update user */
+self.updateUser = async (data) => {
+    try {
+        return await User.update(
+            data,
+            { where: { user_id: data['user_id'] }}
+        );
+    } catch(err) {
+        throw err;
+    }
+}
+
 /** Get users */
 self.getUsers = async (searchKey = '', isActive) => {
     try {

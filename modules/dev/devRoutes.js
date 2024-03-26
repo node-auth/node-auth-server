@@ -11,6 +11,9 @@ const applicationPermissionService = require('../app/services/applicationPermiss
 const callbackUrlService = require('../app/services/callbackUrlService');
 const roleService = require('../auth/services/roleService');
 const rolePermissionService = require('../auth/services/rolePermissionService');
+const userService = require('../auth/services/userService');
+const userRoleService = require('../auth/services/userRoleService');
+const userPermissionService = require('../auth/services/userPermissionService');
 
 const router = express.Router();
 
@@ -271,10 +274,10 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** get organization id */
                 const orgIndex = responseData['organizations'].findIndex(item => item['organization_code'] == dataToUpdate['organization_id']);
                 dataToUpdate['organization_id'] = responseData['organizations'][orgIndex]['organization_id'];
-                /** Create role */
-                const qRoleUpdate = await roleService.updateRole(dataToUpdate);
+                /** Update role */
+                await roleService.updateRole(dataToUpdate);
                 /** Update response */
-                responseData['roles'][i]['role_id'] = qRoleUpdate['role_id'];
+                responseData['roles'][i]['role_id'] = dataToUpdate['role_id'];
 
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
@@ -290,6 +293,107 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await rolePermissionService.createRolePermission({
                         role_id: dataToUpdate['role_id'],
+                        permission_id: apiPermissionCurrentData['permission_id']
+                    });
+                }
+            }
+        }
+
+        /** Users */
+        const userData = req.body['users'];
+        for(let i = 0; i < userData.length; i++) {
+            if(userData[i]['user_id'] == 0) {
+                /** data for insert */
+                const dataToInsert = JSON.parse(JSON.stringify(userData[i]));
+                const rolesData = JSON.parse(JSON.stringify(userData[i]['roles']));
+                const permissionsData = JSON.parse(JSON.stringify(userData[i]['permissions']));
+                /** remove unnecessary data */
+                delete dataToInsert['user_id'];
+                delete dataToInsert['user_code'];
+                delete dataToInsert['roles'];
+                delete dataToInsert['permissions'];
+                /** get organization id */
+                const orgIndex = responseData['organizations'].findIndex(item => item['organization_code'] == dataToInsert['organization_id']);
+                dataToInsert['organization_id'] = responseData['organizations'][orgIndex]['organization_id'];
+                /** Create role */
+                const qUserInsert = await userService.createUser(dataToInsert);
+                /** Update response */
+                responseData['users'][i]['user_id'] = qUserInsert['user_id'];
+
+                /** Get roles */
+                const roleDataFromJSON = JSON.parse(JSON.stringify(responseData['roles']));
+
+                /** Create user roles */
+                for(let j = 0; j < rolesData.length; j++) {
+                    const roleIndex = roleDataFromJSON.findIndex(item => item['role_code'] == rolesData[j]);
+                    const roleCurrentData = roleDataFromJSON[roleIndex];
+                    await userRoleService.createUserRole({
+                        user_id: qUserInsert['user_id'],
+                        role_id: roleCurrentData['role_id']
+                    });
+                }
+
+                /** Get api permissions */
+                const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
+                let apiPermissionData = [];
+                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                    apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
+                }
+
+                /** Create user permissions */
+                for(let j = 0; j < permissionsData.length; j++) {
+                    const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
+                    const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
+                    await userPermissionService.createUserPermission({
+                        user_id: qUserInsert['user_id'],
+                        permission_id: apiPermissionCurrentData['permission_id']
+                    });
+                }
+            } else {
+                /** data for update */
+                const dataToUpdate = JSON.parse(JSON.stringify(userData[i]));
+                const rolesData = JSON.parse(JSON.stringify(userData[i]['roles']));
+                const permissionsData = JSON.parse(JSON.stringify(userData[i]['permissions']));
+                /** remove unnecessary data */
+                delete dataToUpdate['user_code'];
+                delete dataToUpdate['roles'];
+                delete dataToUpdate['permissions'];
+                /** get organization id */
+                const orgIndex = responseData['organizations'].findIndex(item => item['organization_code'] == dataToUpdate['organization_id']);
+                dataToUpdate['organization_id'] = responseData['organizations'][orgIndex]['organization_id'];
+                /** Update role */
+                const qUserUpdate = await userService.updateUser(dataToUpdate);
+                /** Update response */
+                responseData['users'][i]['user_id'] = qUserUpdate['user_id'];
+
+                /** Get roles */
+                const roleDataFromJSON = JSON.parse(JSON.stringify(responseData['roles']));
+
+                /** Create user roles */
+                await userRoleService.deleteUserRoleByUserId(dataToUpdate['user_id']);
+                for(let j = 0; j < rolesData.length; j++) {
+                    const roleIndex = roleDataFromJSON.findIndex(item => item['role_code'] == rolesData[j]);
+                    const roleCurrentData = roleDataFromJSON[roleIndex];
+                    await userRoleService.createUserRole({
+                        user_id: dataToUpdate['user_id'],
+                        role_id: roleCurrentData['role_id']
+                    });
+                }
+
+                /** Get api permissions */
+                const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
+                let apiPermissionData = [];
+                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                    apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
+                }
+
+                /** Create user permissions */
+                await userPermissionService.deleteUserPermissionByUserId(dataToUpdate['user_id']);
+                for(let j = 0; j < permissionsData.length; j++) {
+                    const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
+                    const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
+                    await userPermissionService.createUserPermission({
+                        user_id: dataToUpdate['user_id'],
                         permission_id: apiPermissionCurrentData['permission_id']
                     });
                 }
