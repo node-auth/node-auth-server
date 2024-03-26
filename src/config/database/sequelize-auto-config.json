@@ -1,0 +1,14 @@
+{
+    "dialect": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "additional": {
+      "timestamps": true
+    },
+    "skipTables": [],
+    "caseProp": "l",
+    "caseFile": "p",
+    "singularize": true,
+    "caseModel": "p",
+    "lang": "js"
+}
