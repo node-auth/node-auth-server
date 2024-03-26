@@ -7,6 +7,7 @@
   <h1>node-auth</h1>
 </div>
 <p align="center">Authentication with nodejs</p>
+<p align="center">v.0.1.0</p>
 
 ## Features
 
@@ -17,11 +18,10 @@
 - Client Credentials Grant
 - Refresh Token Grant
 
-# Setup
+
+## Setup
 
 ### Install dependencies
-
-run:
 
 ```
 $ npm install
@@ -29,12 +29,10 @@ $ npm install
 
 ### Migrate database
 
-run:
-
 ```
 $ npx sequelize db:migrate
 ```
 
 ### Seed initial data
 
-Copy the script from db/initial.sql
+Copy the script from `config/db/initial.sql`
