@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const { encryptSHA256 } = require('../../utils/encryption-util');
 const { validateAPIKEY } = require('./devMiddleware');
 /** Services */
@@ -14,6 +15,7 @@ const rolePermissionService = require('../auth/services/rolePermissionService');
 const userService = require('../auth/services/userService');
 const userRoleService = require('../auth/services/userRoleService');
 const userPermissionService = require('../auth/services/userPermissionService');
+const userAuthService = require('../auth/services/userAuthService');
 
 const router = express.Router();
 
@@ -312,11 +314,20 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 delete dataToInsert['user_code'];
                 delete dataToInsert['roles'];
                 delete dataToInsert['permissions'];
+                delete dataToInsert['password'];
                 /** get organization id */
                 const orgIndex = responseData['organizations'].findIndex(item => item['organization_code'] == dataToInsert['organization_id']);
                 dataToInsert['organization_id'] = responseData['organizations'][orgIndex]['organization_id'];
-                /** Create role */
+                /** Create user */
                 const qUserInsert = await userService.createUser(dataToInsert);
+                /** Create password */
+                const saltRounds = 10;
+                const salt = await bcrypt.genSalt(saltRounds);
+                const hashedPassword = await bcrypt.hash(userData[i]['password'], salt);
+                await userAuthService.createUserAuth({
+                    password: hashedPassword,
+                    user_id: qUserInsert['user_id']
+                });
                 /** Update response */
                 responseData['users'][i]['user_id'] = qUserInsert['user_id'];
 
@@ -361,10 +372,19 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** get organization id */
                 const orgIndex = responseData['organizations'].findIndex(item => item['organization_code'] == dataToUpdate['organization_id']);
                 dataToUpdate['organization_id'] = responseData['organizations'][orgIndex]['organization_id'];
-                /** Update role */
-                const qUserUpdate = await userService.updateUser(dataToUpdate);
+                /** Update user */
+                await userService.updateUser(dataToUpdate);
+                /** Create password */
+                await userAuthService.deleteUserAuthByUserId(dataToUpdate['user_id']);
+                const saltRounds = 10;
+                const salt = await bcrypt.genSalt(saltRounds);
+                const hashedPassword = await bcrypt.hash(userData[i]['password'], salt);
+                await userAuthService.createUserAuth({
+                    password: hashedPassword,
+                    user_id: dataToUpdate['user_id']
+                });
                 /** Update response */
-                responseData['users'][i]['user_id'] = qUserUpdate['user_id'];
+                responseData['users'][i]['user_id'] = dataToUpdate['user_id'];
 
                 /** Get roles */
                 const roleDataFromJSON = JSON.parse(JSON.stringify(responseData['roles']));

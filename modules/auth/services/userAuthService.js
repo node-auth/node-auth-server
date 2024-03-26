@@ -11,6 +11,18 @@ self.createUserAuth = async (userAuthData) => {
     }
 }
 
+/** Update user auth */
+self.updateUserAuth = async (data) => {
+    try {
+        return await UserAuth.update(
+            data,
+            { where: { user_auth_id: data['user_auth_id'] }}
+        );
+    } catch(err) {
+        throw err;
+    }
+}
+
 /** Get user auth by id */
 self.getUserAuthById = async (id) => {
     try {
@@ -36,6 +48,17 @@ self.changeUserPassword = async (user_auth_id, password) => {
             { password: password },
             { where: { user_auth_id }}
         );
+    } catch(err) {
+        throw err;
+    }
+}
+
+/** Delete user auth by user id */
+self.deleteUserAuthByUserId = async (user_id) => {
+    try {
+        return await UserAuth.destroy({
+            where: { user_id }
+        })
     } catch(err) {
         throw err;
     }
