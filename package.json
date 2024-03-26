@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "generate-models": "node node_modules/sequelize-auto/bin/sequelize-auto -h localhost -d resilientpinoy -u rp_superadmin -x MaxP@$$w0rd2023@Server -p 5432  --dialect postgres -c ./src/config/database/sequelize-auto-config.json -o ./src/models",
+    "generate-models": "node node_modules/sequelize-auto/bin/sequelize-auto -h localhost -d nodeauthdatabase -u nodeauthadmin -x nodeauthpassword -p 5432  --dialect postgres -c ./src/config/database/sequelize-auto-config.json -o ./src/models",
     "migrate": "npx sequelize db:migrate",
     "migrate:undo:all": "npx sequelize db:migrate:undo:all"
   },
