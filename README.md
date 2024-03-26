@@ -6,7 +6,7 @@
 <div align="center">
   <h1>node-auth</h1>
 </div>
-<p align="center">Authentication with nodejs</p>
+<p align="center">Node Auth is an open source authentication solution built with nodejs</p>
 <p align="center">v.0.1.0</p>
 
 ## Features
