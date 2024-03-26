@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="![image](https://github.com/node-auth/node-auth-server/assets/25092979/6ddcec3f-79be-433e-994a-aec6e5b6eabe)" width="150px" height="150px">
+  <img src="![node-auth-logo](https://github.com/node-auth/node-auth-server/assets/25092979/1c124b8a-391e-484a-809d-f06017a801fe)
+" width="150px" height="150px">
 </p>
 
 <div align="center">
