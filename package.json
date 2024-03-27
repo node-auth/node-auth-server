@@ -1,7 +1,7 @@
 {
-  "name": "node_auth",
+  "name": "node-auth-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Opensource authentication server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,14 @@
     "migrate": "npx sequelize db:migrate",
     "migrate:undo:all": "npx sequelize db:migrate:undo:all"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/node-auth/node-auth-server.git"
+  },
+  "keywords": [
+    "node-auth-middleware"
+  ],
+  "author": "node-auth",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.8",
