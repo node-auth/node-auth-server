@@ -12,5 +12,12 @@ router.post('/:domainId/o/token', checkSettings(['OAUTH_V1_TOKEN_ENABLED']), oau
 router.post('/:domainId/o/revoke', checkSettings(['OAUTH_V1_REVOKE_ENABLED']), oauth2Controller.revoke);
 router.post('/:domainId/o/instrospect', checkSettings(['OAUTH_V1_INTROSPECT_ENABLED']), oauth2Controller.introspect);
 router.get('/:domainId/o/userinfo', checkSettings(['OAUTH_V1_USERINFO_ENABLED']), validateToken,  validatePermission(['profile']), oauth2Controller.userinfo);
+router.get('/:domainId/o/csrf-token', (req, res) => {
+    if (req.headers.origin == "http://localhost:9000") {
+        res.json({ csrfToken: req.csrfToken() });
+    } else {
+        res.status(403).send('Forbidden');
+    }
+});
 
 module.exports = router;

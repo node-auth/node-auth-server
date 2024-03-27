@@ -28,11 +28,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 /** CSRF protection */
-app.use(csrf({ cookie: true }));
-app.use((req, res, next) => {
-    res.locals.csrfToken = req.csrfToken();
-    next();
-});
+//app.use(csrf({ cookie: true }));
+//app.use((req, res, next) => {
+//    res.locals.csrfToken = req.csrfToken();
+//    next();
+//});
 app.get("/csrf-token", (req, res) => {
     if (req.headers.origin == "http://localhost:9000") {
         res.json({ csrfToken: req.csrfToken() });

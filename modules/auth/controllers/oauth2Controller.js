@@ -224,16 +224,15 @@ self.token = async (req, res) => {
             /** Get authorization code */
             const qAuthorizationCode = await authorizationCodeService.getAuthorizationCode(code, client_id);
             if(!qAuthorizationCode) return res.status(400).json({success: false, message: 'Invalid request'});
+
             /** Get user details */
             const qUserByEmail = await userService.getUserByEmail(username);
             if(!qUserByEmail) return res.status(400).json({success: false, message: 'Invalid request'});
             const qUserAuth = await userAuthService.getUserAuthByUserId(qUserByEmail['user_id']);
             if(!qUserAuth) return res.status(400).json({success: false, message: 'Invalid request'});
             /** Password grant validation */
-            if(grant_type == "password") {
-                const isMatchedPassword = await bcrypt.compare(password, qUserAuth['password']);
-                if(!isMatchedPassword) isValid = false;
-            }
+            const isMatchedPassword = await bcrypt.compare(password, qUserAuth['password']);
+            if(!isMatchedPassword) isValid = false;
             /** Validate challenge */
             const verifierEncrypted = encryptSHA256(code_verifier);
             if(verifierEncrypted != qAuthorizationCode['code_challenge']) isValid = false;
@@ -431,7 +430,6 @@ self.introspect = async (req, res) => {
         const responseData = {
             client_id: qApplication['client_id'],
             client_secret: qApplication['client_secret'],
-            access_token: validatedData.value['token'],
             ...decoded
         }
         res.status(200).json({success: false, message: 'Success', data: responseData});
