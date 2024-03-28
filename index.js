@@ -51,8 +51,8 @@ app.use(fileUpload({
 }));
 
 /** Modules */
-require('./modules')(app);
+require('./routes')(app);
 
 // LISTENER
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => { console.log("App started at port ", port)});
