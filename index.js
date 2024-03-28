@@ -5,9 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const cors = require('cors');
-
-/** CSRF Options */
-const { generateToken, csrfProtection } = require('./utils/csrf-util');
+const { csrfProtection } = require('node-auth-csrf');
 
 /** Environment variables */
 require('dotenv').config()
@@ -32,11 +30,8 @@ app.use(cookieParser());
 /** CSRF protection */
 app.use(csrfProtection(process.env.CSRF_SECRET));
 app.get("/csrf-token", (req, res) => {
-    const csrfToken = generateToken(process.env.CSRF_SECRET);
+    const csrfToken = req.csrfProtection.generateToken();
     res.json({ csrfToken });
-});
-app.post('/csrf-test', (req, res) => {
-    res.send("PROTECTED");
 });
 
 /** XSS protection */
