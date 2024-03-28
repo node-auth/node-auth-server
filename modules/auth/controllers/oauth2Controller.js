@@ -377,7 +377,7 @@ self.revoke = async (req, res) => {
             /** Delete token */
             await refreshTokenService.deleteRefreshTokenById(getToken['refresh_token_id']);
         }
-        res.status(200).json({success: false, message: 'Token revoked'});
+        res.status(200).json({success: true, message: 'Token revoked'});
     } catch(err) {
         console.log(err)
         res.status(500).json({success: false, message: 'An error occured', error: err.message});
@@ -403,7 +403,7 @@ self.userinfo = async (req, res) => {
             gender: qUserIndo['gender'],
             extended_info: qUserIndo['extended_info']
         }
-        res.status(200).json({success: false, message: 'Success', data: responseData});
+        res.status(200).json({success: true, message: 'Success', data: responseData});
     } catch(err) {
         console.log(err)
         res.status(500).json({success: false, message: 'An error occured', error: err.message});
@@ -414,6 +414,7 @@ self.userinfo = async (req, res) => {
 self.introspect = async (req, res) => {
     try {
         /** Validate inputs */
+        console.log("Received");
         const validatedData = oauth2V1Validation.validateIntrospectSchema(req.body);
         if(validatedData.error) return res.status(400).json({success: false, message: validatedData.error.message });
         /** Get application */
@@ -432,7 +433,7 @@ self.introspect = async (req, res) => {
             client_secret: qApplication['client_secret'],
             ...decoded
         }
-        res.status(200).json({success: false, message: 'Success', data: responseData});
+        res.status(200).json({success: true, message: 'Success', data: responseData});
     } catch(err) {
         console.log(err)
         res.status(500).json({success: false, message: 'An error occured', error: err.message});

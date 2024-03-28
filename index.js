@@ -3,9 +3,11 @@ const fileUpload = require('express-fileupload');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const csrf = require('csurf');
 const helmet = require('helmet');
 const cors = require('cors');
+
+/** CSRF Options */
+const { generateToken, csrfProtection } = require('./utils/csrf-util');
 
 /** Environment variables */
 require('dotenv').config()
@@ -28,17 +30,13 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 /** CSRF protection */
-//app.use(csrf({ cookie: true }));
-//app.use((req, res, next) => {
-//    res.locals.csrfToken = req.csrfToken();
-//    next();
-//});
+app.use(csrfProtection(process.env.CSRF_SECRET));
 app.get("/csrf-token", (req, res) => {
-    if (req.headers.origin == "http://localhost:9000") {
-        res.json({ csrfToken: req.csrfToken() });
-    } else {
-        res.status(403).send('Forbidden');
-    }
+    const csrfToken = generateToken(process.env.CSRF_SECRET);
+    res.json({ csrfToken });
+});
+app.post('/csrf-test', (req, res) => {
+    res.send("PROTECTED");
 });
 
 /** XSS protection */
