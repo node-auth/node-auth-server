@@ -10,7 +10,6 @@
     "generate-models": "node node_modules/sequelize-auto/bin/sequelize-auto -h localhost -d nodeauthdatabase -u nodeauthadmin -x nodeauthpassword -p 5432  --dialect postgres -c ./src/config/database/sequelize-auto-config.json -o ./src/models",
     "migrate": "npx sequelize db:migrate",
     "migrate:undo:all": "npx sequelize db:migrate:undo:all",
-    "dcompdev": "docker-compose -f docker-compose-dev.yml up",
     "dcomp": "docker-compose up",
     "dcompdown": "docker-compose down",
     "dcompdownall": "docker-compose down --volumes --rmi all"
