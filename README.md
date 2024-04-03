@@ -35,3 +35,26 @@ $ npx sequelize db:migrate
 ### Seed initial data
 
 Copy the script from `config/db/initial.sql`
+
+
+### Deploy on Kubernetes
+
+Add Ingress Controller
+```
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+```
+
+Deploy to Dev
+```
+helm install node-auth-server ./helm --values values-dev.yaml
+```
+
+Deploy to Test
+```
+helm install node-auth-server ./helm --values values-test.yaml
+```
+
+Deploy to Prod
+```
+helm install node-auth-server ./helm --values values-prod.yaml
+```
