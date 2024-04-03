@@ -6,12 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx sequelize-cli db:migrate && nodemon index.js",
-    "start": "npx sequelize-cli db:migrate && node index.js",
+    "start": "node index.js",
     "generate-models": "node node_modules/sequelize-auto/bin/sequelize-auto -h localhost -d nodeauthdatabase -u nodeauthadmin -x nodeauthpassword -p 5432  --dialect postgres -c ./src/config/database/sequelize-auto-config.json -o ./src/models",
     "migrate": "npx sequelize db:migrate",
     "migrate:undo:all": "npx sequelize db:migrate:undo:all",
+    "drun": "docker run --network=\"host\" -p 3000:3000 node-auth-server",
     "dcomp": "docker-compose up",
-    "dcompdev": "docker-compose -f docker-compose-dev.yml up",
     "dcompdown": "docker-compose down",
     "dcompdownall": "docker-compose down --volumes --rmi all"
   },

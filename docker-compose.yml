@@ -1,3 +1,6 @@
+# ONLY RUN THIS LOCALLY FOR TESTING PURPOSES
+
+
 version: '3.8'
 
 services:

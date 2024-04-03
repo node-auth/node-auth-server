@@ -1,0 +1,10 @@
+appName: node-auth-prod
+
+namespace: node-auth-prod
+
+replicaCount: 1
+
+image:
+  repository: xreycdeveloper22/node-auth-server
+  tag: "latest"
+  pullPolicy: IfNotPresent
