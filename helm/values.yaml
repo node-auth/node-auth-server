@@ -15,4 +15,4 @@ service:
 
 ingress:
   path: /
-  host: xreyc.test
+  host: nodeauth.dev
