@@ -9,6 +9,12 @@ module.exports = {
     host: process.env.DB_HOST_NAME,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
     // dialectOptions: {
     //   bigNumberStrings: true,
     //   ssl: {
