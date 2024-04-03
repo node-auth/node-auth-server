@@ -5,13 +5,9 @@ namespace: node-auth
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: xreycdeveloper22/node-auth-server
   tag: "latest"
   pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 80
 
 ingress:
   path: /
