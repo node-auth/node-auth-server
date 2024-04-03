@@ -36,4 +36,4 @@ jobs:
       run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
     - name: Install Helm chart
-      run: helm upgrade --install node-app-default ./helm --values values-prod.yaml
+      run: helm upgrade --install node-app-default ./helm --values ./helm/values-prod.yaml

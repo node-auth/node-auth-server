@@ -42,11 +42,12 @@ Copy the script from `config/db/initial.sql`
 Add Ingress Controller
 ```
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
 Deploy to Dev
 ```
-helm install node-auth-server ./helm --values values-dev.yaml
+helm install node-auth-server ./helm --values ./helm/values-dev.yaml
 ```
 
 Deploy to Test
