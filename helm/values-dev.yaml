@@ -8,3 +8,7 @@ image:
   repository: xreycdeveloper22/node-auth-server
   tag: "latest"
   pullPolicy: IfNotPresent
+
+ingress:
+  path: /
+  host: xreyc.test
