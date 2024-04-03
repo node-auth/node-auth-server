@@ -54,5 +54,5 @@ app.use(fileUpload({
 require('./routes')(app);
 
 // LISTENER
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => { console.log("App started at port ", port)});
