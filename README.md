@@ -78,6 +78,7 @@ helm uninstall app-release-name
 # DEPLOYMENT
 helm install node-app-default ./helm
 helm install node-app-dev ./helm --values values-dev.yaml
+helm install node-app-test ./helm --values values-test.yaml
 helm install node-app-prod ./helm --values values-prod.yaml
 
 # UPGRADE
