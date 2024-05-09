@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { RolePermission } = require('../../../models');
 let self = {};
 
 /** Create role permission */
 self.createRolePermission = async (data) => {
     try {
+        data['role_permission_uuid'] = uuidv7();
         return await RolePermission.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateRolePermission = async (data) => {
     try {
         return await RolePermission.update(
             data,
-            { where: { role_permission_id: data['role_permission_id'] }}
+            { where: { role_permission_id: data['role_permission_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateRolePermission = async (data) => {
 self.getRolePermissionById = async (id) => {
     try {
         return await RolePermission.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -38,7 +40,7 @@ self.getRolePermissionsByRoleId = async (id) => {
         return await RolePermission.findAll({
             where: { role_id: id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -46,8 +48,8 @@ self.getRolePermissionsByRoleId = async (id) => {
 /** Get permission by role id and permission id */
 self.getPermissionByRoleIdAndPermissionId = async (role_id, permission_id) => {
     try {
-        return await RolePermission.findOne({where: { role_id, permission_id }});
-    } catch(err) {
+        return await RolePermission.findOne({ where: { role_id, permission_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -58,7 +60,7 @@ self.deleteRolePermissionByRoleId = async (role_id) => {
         return await RolePermission.destroy({
             where: { role_id }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -71,7 +73,7 @@ self.deleteRolePermissionById = async (id) => {
                 role_permission_id: id
             }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

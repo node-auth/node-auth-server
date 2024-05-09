@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { UserPermission } = require('../../../models');
 let self = {};
 
 /** Create user permission */
 self.createUserPermission = async (data) => {
     try {
+        data['user_permission_uuid'] = uuidv7();
         return await UserPermission.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateUserPermission = async (data) => {
     try {
         return await UserPermission.update(
             data,
-            { where: { user_permission_id: data['user_permission_id'] }}
+            { where: { user_permission_id: data['user_permission_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateUserPermission = async (data) => {
 self.getUserPermissionById = async (id) => {
     try {
         return await UserPermission.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -38,7 +40,7 @@ self.getUserPermissionsByUserId = async (id) => {
         return await UserPermission.findAll({
             where: { user_id: id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -46,8 +48,8 @@ self.getUserPermissionsByUserId = async (id) => {
 /** Get permission by user id and permission id */
 self.getPermissionByUserIdAndPermissionId = async (user_id, permission_id) => {
     try {
-        return await UserPermission.findOne({where: { user_id, permission_id }});
-    } catch(err) {
+        return await UserPermission.findOne({ where: { user_id, permission_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -58,7 +60,7 @@ self.deleteUserPermissionByUserId = async (user_id) => {
         return await UserPermission.destroy({
             where: { user_id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -71,7 +73,7 @@ self.deleteUserPermissionById = async (id) => {
                 user_permission_id: id
             }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

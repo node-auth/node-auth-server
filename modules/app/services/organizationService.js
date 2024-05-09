@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { Organization } = require('../../../models');
 let self = {};
 
 /** Create organization */
 self.createOrganization = async (data) => {
     try {
+        data['organization_uuid'] = uuidv7();
         return await Organization.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateOrganization = async (data) => {
     try {
         return await Organization.update(
             data,
-            { where: { organization_id: data['organization_id'] }}
+            { where: { organization_id: data['organization_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateOrganization = async (data) => {
 self.getOrganizationById = async (id) => {
     try {
         return await Organization.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -40,7 +42,7 @@ self.deleteRoleById = async (id) => {
                 organization_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

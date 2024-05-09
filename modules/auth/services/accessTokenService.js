@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { AccessToken } = require('../../../models');
 let self = {};
 
 /** Create access token */
 self.createAccessToken = async (data) => {
     try {
+        data['access_token_uuid'] = uuidv7();
         return await AccessToken.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -15,7 +17,7 @@ self.createAccessToken = async (data) => {
 self.getAccessTokenById = async (id) => {
     try {
         return await AccessToken.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -23,8 +25,8 @@ self.getAccessTokenById = async (id) => {
 /** Get access token by access_toek */
 self.getAccessTokenByToken = async (access_token) => {
     try {
-        return await AccessToken.findOne({where: { access_token }});
-    } catch(err) {
+        return await AccessToken.findOne({ where: { access_token } });
+    } catch (err) {
         throw err;
     }
 }
@@ -32,8 +34,8 @@ self.getAccessTokenByToken = async (access_token) => {
 /** Get access token by user_id */
 self.getAccessTokensByUserId = async (user_id) => {
     try {
-        return await AccessToken.findAll({where: { user_id }});
-    } catch(err) {
+        return await AccessToken.findAll({ where: { user_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -41,8 +43,8 @@ self.getAccessTokensByUserId = async (user_id) => {
 /** Get access token by client_id */
 self.getAccessTokensByClientId = async (client_id) => {
     try {
-        return await AccessToken.findAll({where: { client_id }});
-    } catch(err) {
+        return await AccessToken.findAll({ where: { client_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -50,8 +52,8 @@ self.getAccessTokensByClientId = async (client_id) => {
 /** Get refresh token by clientAndToken */
 self.getRefreshTokenByClientAndToken = async (client_id, access_token) => {
     try {
-        return await UserToken.findOne({where: { client_id, access_token }});
-    } catch(err) {
+        return await UserToken.findOne({ where: { client_id, access_token } });
+    } catch (err) {
         throw err;
     }
 }
@@ -64,7 +66,7 @@ self.deleteAccessTokenById = async (id) => {
                 access_token_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

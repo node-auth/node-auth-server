@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { UserToken } = require('../../../models');
 let self = {};
 
 /** Create user token */
 self.createUserToken = async (data) => {
     try {
+        data['user_token_uuid'] = uuidv7();
         return await UserToken.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -15,7 +17,7 @@ self.createUserToken = async (data) => {
 self.getUserTokenById = async (id) => {
     try {
         return await UserToken.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -23,8 +25,8 @@ self.getUserTokenById = async (id) => {
 /** Get user auth by user_id */
 self.getUserToken = async (user_id, name) => {
     try {
-        return await UserToken.findOne({where: { user_id, name }});
-    } catch(err) {
+        return await UserToken.findOne({ where: { user_id, name } });
+    } catch (err) {
         throw err;
     }
 }
@@ -32,8 +34,8 @@ self.getUserToken = async (user_id, name) => {
 /** Get user auth by name and Value */
 self.getUserTokenByNameAndValue = async (name, value) => {
     try {
-        return await UserToken.findOne({where: { name, value }});
-    } catch(err) {
+        return await UserToken.findOne({ where: { name, value } });
+    } catch (err) {
         throw err;
     }
 }
@@ -46,7 +48,7 @@ self.deleteUserTokenById = async (id) => {
                 user_token_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

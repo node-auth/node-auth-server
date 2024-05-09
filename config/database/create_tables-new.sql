@@ -30,12 +30,13 @@ CREATE UNIQUE INDEX organizations_organization_uuid_idx ON organizations (organi
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   user_uuid UUID DEFAULT uuid_generate_v4() NOT NULL,
-  username VARCHAR(50) NOT NULL,
-  first_name VARCHAR(50) NOT NULL,
+  username VARCHAR(50),
+  full_name VARCHAR(100) NOT NULL,
+  first_name VARCHAR(50),
   middle_name VARCHAR(50),
-  last_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50),
   nickname VARCHAR(50),
-  email VARCHAR(50) NOT NULL,
+  email VARCHAR(50),
   phone VARCHAR(20),
   birthdate DATE,
   address VARCHAR(1024),
@@ -162,15 +163,15 @@ ALTER TABLE user_roles
   ADD CONSTRAINT user_roles_user_id_fk
   FOREIGN KEY (user_id)
   REFERENCES users(user_id)
-  ON UPDATE SET NULL
-  ON DELETE SET NULL;
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
 
 ALTER TABLE user_roles
   ADD CONSTRAINT user_roles_role_id_fk
   FOREIGN KEY (role_id)
   REFERENCES roles(role_id)
-  ON UPDATE SET NULL
-  ON DELETE SET NULL;
+  ON UPDATE CASCADE
+  ON DELETE CASCADE;
 
 ALTER TABLE user_roles
   ADD CONSTRAINT user_roles_created_by_fk

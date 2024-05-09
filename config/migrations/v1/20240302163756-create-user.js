@@ -14,16 +14,19 @@ module.exports = {
       },
       user_uuid: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false
       },
       username: {
         type: Sequelize.STRING(50),
+        allowNull: true
+      },
+      full_name: {
+        type: Sequelize.STRING(100),
         allowNull: false
       },
       first_name: {
         type: Sequelize.STRING(50),
-        allowNull: false,
+        allowNull: true,
       },
       middle_name: {
         type: Sequelize.STRING(50),
@@ -31,7 +34,7 @@ module.exports = {
       },
       last_name: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: true
       },
       nickname: {
         type: Sequelize.STRING(50),
@@ -39,7 +42,7 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: true
       },
       phone: {
         type: Sequelize.STRING(20),
@@ -121,6 +124,13 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: true
+      },
+      metadata: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+        defaultValue: {
+          version: 0
+        }
       }
     });
     /** Add indexes reference */

@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { UserAuth } = require('../../../models');
 let self = {};
 
 /** Create user auth */
-self.createUserAuth = async (userAuthData) => {
+self.createUserAuth = async (data) => {
     try {
-        return await UserAuth.create(userAuthData);
-    } catch(err) {
+        data['user_auth_uuid'] = uuidv7();
+        return await UserAuth.create(data);
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateUserAuth = async (data) => {
     try {
         return await UserAuth.update(
             data,
-            { where: { user_auth_id: data['user_auth_id'] }}
+            { where: { user_auth_id: data['user_auth_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateUserAuth = async (data) => {
 self.getUserAuthById = async (id) => {
     try {
         return await UserAuth.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -35,8 +37,8 @@ self.getUserAuthById = async (id) => {
 /** Get user auth by user_id */
 self.getUserAuthByUserId = async (user_id) => {
     try {
-        return await UserAuth.findOne({where: { user_id }});
-    } catch(err) {
+        return await UserAuth.findOne({ where: { user_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -46,9 +48,9 @@ self.changeUserPassword = async (user_auth_id, password) => {
     try {
         return await UserAuth.update(
             { password: password },
-            { where: { user_auth_id }}
+            { where: { user_auth_id } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -59,7 +61,7 @@ self.deleteUserAuthByUserId = async (user_id) => {
         return await UserAuth.destroy({
             where: { user_id }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -72,7 +74,7 @@ self.deleteUserAuthById = async (id) => {
                 user_auth_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

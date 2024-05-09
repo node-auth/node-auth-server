@@ -54,6 +54,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false
+    },
+    metadata: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: {
+        version: 0
+      }
     }
   }, {
     sequelize,

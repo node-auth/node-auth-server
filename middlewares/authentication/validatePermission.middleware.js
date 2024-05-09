@@ -1,15 +1,23 @@
-module.exports.validatePermission = (permissions) => {
+module.exports.validatePermission = (permissionList) => {
     return (req, res, next) => {
-        let isPemitted = true;
-        for(let i = 0; i < permissions.length; i++) {
-            const checkPermission = req.user.permissions[process.env.BASE_URL].includes(permissions[i]);
-            if(!checkPermission) {
-                isPemitted = false;
-                break;
+        try {
+            let isPermitted = true;
+            const userPermissions = req.user.permissions?.[process.env.BASE_URL];
+            if (!userPermissions) {
+                return res.status(401).json({ success: false, message: 'Unauthorize' });
             }
+            for (let i = 0; i < permissionList.length; i++) {
+                const checkPermission = userPermissions.includes(permissionList[i]);
+                if (!checkPermission) {
+                    isPermitted = false;
+                    break;
+                }
+            }
+            if (!isPermitted) return res.status(401).json({ success: false, message: 'Unauthorize' });
+            next();
+        } catch (err) {
+            return res.status(401).json({ success: false, message: 'Unauthorize' });
         }
-        if(!isPemitted) return res.status(401).json({ error: 'Unauthorize' });
-        next();
     }
 }
 

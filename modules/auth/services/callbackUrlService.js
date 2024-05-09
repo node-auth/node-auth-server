@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { CallbackUrl, sequelize } = require('../../../models');
 let self = {};
 
 /** Create callback url */
 self.createCallbackUrl = async (data) => {
     try {
+        data['callback_url_uuid'] = uuidv7();
         return await CallbackUrl.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -15,9 +17,9 @@ self.createCallbackUrl = async (data) => {
 self.getAuthCallbackUrlsByApplicationId = async (application_id) => {
     try {
         return await CallbackUrl.findAll({
-            where: {application_id},
+            where: { application_id },
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -26,7 +28,7 @@ self.getAuthCallbackUrlsByApplicationId = async (application_id) => {
 self.getCallbackUrlById = async (id) => {
     try {
         return await CallbackUrl.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -39,7 +41,7 @@ self.deleteCallbackUrlById = async (id) => {
                 callback_url_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { Api } = require('../../../models');
 let self = {};
 
 /** Create api */
 self.createApi = async (data) => {
     try {
+        data['api_uuid'] = uuidv7();
         return await Api.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateApi = async (data) => {
     try {
         return await Api.update(
             data,
-            { where: { api_id: data['api_id'] }}
+            { where: { api_id: data['api_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateApi = async (data) => {
 self.getApiById = async (id) => {
     try {
         return await Api.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -40,7 +42,7 @@ self.deleteApiById = async (id) => {
                 api_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

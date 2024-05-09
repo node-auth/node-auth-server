@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Permission.belongsTo(models.User, { foreignKey: 'created_by'} );
-      Permission.belongsTo(models.User, { foreignKey: 'updated_by'} );
+      Permission.belongsTo(models.User, { foreignKey: 'created_by' });
+      Permission.belongsTo(models.User, { foreignKey: 'updated_by' });
     }
   }
   Permission.init({
@@ -64,6 +64,13 @@ module.exports = (sequelize, DataTypes) => {
     updated_at: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    metadata: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: {
+        version: 0
+      }
     }
   }, {
     sequelize,

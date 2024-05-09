@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { UserRole } = require('../../../models');
 let self = {};
 
 /** Create user role */
 self.createUserRole = async (data) => {
     try {
+        data['user_role_uuid'] = uuidv7();
         return await UserRole.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -15,7 +17,7 @@ self.createUserRole = async (data) => {
 self.getUserRoleById = async (id) => {
     try {
         return await UserRole.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -23,8 +25,8 @@ self.getUserRoleById = async (id) => {
 /** Get user roles by user_id */
 self.getUserRolesByUserId = async (user_id) => {
     try {
-        return await UserRole.findAll({where: { user_id }});
-    } catch(err) {
+        return await UserRole.findAll({ where: { user_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -37,7 +39,7 @@ self.deleteUserRoleByUserId = async (id) => {
                 user_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -50,7 +52,7 @@ self.deleteUserRoleById = async (id) => {
                 user_role_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

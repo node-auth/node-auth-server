@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { Application } = require('../../../models');
 let self = {};
 
 /** Create application */
-self.createApplication = async (userData) => {
+self.createApplication = async (data) => {
     try {
-        return await Application.create(userData);
-    } catch(err) {
+        data['application_uuid'] = uuidv7();
+        return await Application.create(data);
+    } catch (err) {
         throw err;
     }
 }
@@ -24,7 +26,7 @@ self.getApplications = async (searchKey = '') => {
                 }
             },
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -33,7 +35,7 @@ self.getApplications = async (searchKey = '') => {
 self.getApplicationById = async (id) => {
     try {
         return await Application.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -41,8 +43,8 @@ self.getApplicationById = async (id) => {
 /** Get application by client id */
 self.getApplicationByClientId = async (client_id) => {
     try {
-        return await Application.findOne({where: { client_id }});
-    } catch(err) {
+        return await Application.findOne({ where: { client_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -55,7 +57,7 @@ self.deleteApplicationById = async (id) => {
                 application_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

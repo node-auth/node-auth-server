@@ -1,0 +1,14 @@
+appName: node-auth-dev
+
+namespace: node-auth-dev
+
+replicaCount: 1
+
+image:
+  repository: xreycdeveloper22/node-auth-server
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+ingress:
+  path: /
+  host: nodeauth.dev

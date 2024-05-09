@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { AuthorizationCode } = require('../../../models');
 let self = {};
 
 /** Create authorization code */
 self.createAuthorizationCode = async (data) => {
     try {
+        data['authorization_code_uuid'] = uuidv7();
         return await AuthorizationCode.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -17,7 +19,7 @@ self.getAuthorizationCode = async (code, client_id) => {
         return await AuthorizationCode.findOne({
             where: { code, client_id },
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -30,7 +32,7 @@ self.deleteAuthorizationCode = async (id) => {
                 authorization_code_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

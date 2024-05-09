@@ -75,6 +75,13 @@ module.exports = (sequelize, DataTypes) => {
     updated_at: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    metadata: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: {
+        version: 0
+      }
     }
   }, {
     sequelize,

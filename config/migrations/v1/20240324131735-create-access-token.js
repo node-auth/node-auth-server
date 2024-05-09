@@ -11,7 +11,6 @@ module.exports = {
       },
       access_token_uuid: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false
       },
       access_token: {
@@ -38,6 +37,13 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         allowNull: false
+      },
+      metadata: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+        defaultValue: {
+          version: 0
+        }
       }
     });
     /** Add indexes reference */

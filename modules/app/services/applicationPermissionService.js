@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { ApplicationPermission } = require('../../../models');
 let self = {};
 
 /** Create application permission */
 self.createApplicationPermission = async (data) => {
     try {
+        data['application_permission_uuid'] = uuidv7();
         return await ApplicationPermission.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateApplicationPermission = async (data) => {
     try {
         return await ApplicationPermission.update(
             data,
-            { where: { application_permission_id: data['application_permission_id'] }}
+            { where: { application_permission_id: data['application_permission_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateApplicationPermission = async (data) => {
 self.getApplicationPermissionById = async (id) => {
     try {
         return await ApplicationPermission.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -38,7 +40,7 @@ self.getApplicationPermissionsByApplicationId = async (id) => {
         return await ApplicationPermission.findAll({
             where: { application_id: id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -46,8 +48,8 @@ self.getApplicationPermissionsByApplicationId = async (id) => {
 /** Get application permission by application id and permission id */
 self.getPermissionApplicationIdAndPermissionId = async (application_id, permission_id) => {
     try {
-        return await ApplicationPermission.findOne({where: { application_id, permission_id }});
-    } catch(err) {
+        return await ApplicationPermission.findOne({ where: { application_id, permission_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -58,7 +60,7 @@ self.deleteApplicationPermissionByApplicationId = async (application_id) => {
         return await ApplicationPermission.destroy({
             where: { application_id }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -71,7 +73,7 @@ self.deleteApplicationPermissionById = async (id) => {
                 application_permission_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

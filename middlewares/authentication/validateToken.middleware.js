@@ -9,13 +9,14 @@ module.exports.validateToken = (req, res, next) => {
     }
     /** Validate token */
     jwt.verify(token, process.env.JWT_PUBLIC_KEY, {
-        audience: req.headers['user-agent'] ?? process.env.JWT_AUDIENCE,
         issuer: process.env.JWT_ISSUER,
         algorithms: ['RS256']
     }, (err, user) => {
         if (err) {
+            console.log(err);
             return res.sendStatus(403); // Forbidden
         }
+        console.log(user);
         req.user = user;
         next();
     });

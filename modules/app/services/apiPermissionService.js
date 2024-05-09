@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { ApiPermission } = require('../../../models');
 let self = {};
 
 /** Create api permission */
 self.createApiPermission = async (data) => {
     try {
+        data['api_permission_uuid'] = uuidv7();
         return await ApiPermission.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateApiPermission = async (data) => {
     try {
         return await ApiPermission.update(
             data,
-            { where: { api_permission_id: data['api_permission_id'] }}
+            { where: { api_permission_id: data['api_permission_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateApiPermission = async (data) => {
 self.getApiPermissionById = async (id) => {
     try {
         return await ApiPermission.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -38,7 +40,7 @@ self.getApiPermissionByApiId = async (id) => {
         return await ApiPermission.findAll({
             where: { api_id: id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -46,8 +48,8 @@ self.getApiPermissionByApiId = async (id) => {
 /** Get api permission by api id and permission id */
 self.getPermissionApiIdAndPermissionId = async (api_id, permission_id) => {
     try {
-        return await ApiPermission.findOne({where: { api_id, permission_id }});
-    } catch(err) {
+        return await ApiPermission.findOne({ where: { api_id, permission_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -60,7 +62,7 @@ self.deleteApiPermissionById = async (id) => {
                 api_permission_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

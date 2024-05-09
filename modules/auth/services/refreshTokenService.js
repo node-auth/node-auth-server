@@ -1,13 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { RefreshToken } = require('../../../models');
 let self = {};
 
 /** Create refresh token */
 self.createRefreshToken = async (data) => {
     try {
-        console.log(data)
+        data['refresh_token_uuid'] = uuidv7();
         return await RefreshToken.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,7 +17,7 @@ self.createRefreshToken = async (data) => {
 self.getRefreshTokenById = async (id) => {
     try {
         return await RefreshToken.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -24,8 +25,8 @@ self.getRefreshTokenById = async (id) => {
 /** Get refresh token by refresh_toek */
 self.getRefreshTokenByToken = async (refresh_token) => {
     try {
-        return await RefreshToken.findOne({where: { refresh_token }});
-    } catch(err) {
+        return await RefreshToken.findOne({ where: { refresh_token } });
+    } catch (err) {
         throw err;
     }
 }
@@ -33,8 +34,8 @@ self.getRefreshTokenByToken = async (refresh_token) => {
 /** Get refresh token by user_id */
 self.getRefreshTokensByUserId = async (user_id) => {
     try {
-        return await RefreshToken.findAll({where: { user_id }});
-    } catch(err) {
+        return await RefreshToken.findAll({ where: { user_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -42,8 +43,8 @@ self.getRefreshTokensByUserId = async (user_id) => {
 /** Get refresh token by client_id */
 self.getRefreshTokensByClientId = async (client_id) => {
     try {
-        return await RefreshToken.findAll({where: { client_id }});
-    } catch(err) {
+        return await RefreshToken.findAll({ where: { client_id } });
+    } catch (err) {
         throw err;
     }
 }
@@ -51,8 +52,8 @@ self.getRefreshTokensByClientId = async (client_id) => {
 /** Get refresh token by clientAndToken */
 self.getRefreshTokenByClientAndToken = async (client_id, refresh_token) => {
     try {
-        return await RefreshToken.findOne({where: { client_id, refresh_token }});
-    } catch(err) {
+        return await RefreshToken.findOne({ where: { client_id, refresh_token } });
+    } catch (err) {
         throw err;
     }
 }
@@ -65,7 +66,7 @@ self.deleteRefreshTokenById = async (id) => {
                 refresh_token_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

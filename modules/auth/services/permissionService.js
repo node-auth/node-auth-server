@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { Permission, sequelize } = require('../../../models');
 let self = {};
 
 /** Create permission */
 self.createPermission = async (data) => {
     try {
+        data['permission_uuid'] = uuidv7();
         return await Permission.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updatePermission = async (data) => {
     try {
         return await Permission.update(
             data,
-            { where: { permission_id: data['permission_id'] }}
+            { where: { permission_id: data['permission_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -35,7 +37,7 @@ self.getAuthPermissions = async () => {
         const qResult = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
         const result = qResult.map(item => item.permission_identifier);
         return result;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -54,7 +56,7 @@ self.getUserPermissions = async (userId) => {
         LEFT JOIN users ON user_permissions.user_id = users.user_id OR user_roles.user_id = users.user_id
         WHERE users.user_id = :userId
         GROUP BY apis.api_identifier, permissions.permission_identifier`;
-        const qResult = await sequelize.query(query, { 
+        const qResult = await sequelize.query(query, {
             replacements: { userId },
             type: sequelize.QueryTypes.SELECT
         });
@@ -68,7 +70,7 @@ self.getUserPermissions = async (userId) => {
             result[api_identifier].push(permission_identifier);
         });
         return result;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -88,8 +90,8 @@ self.getApplicationPermissions = async (clientId, clientSecret) => {
             applications.client_secret = :clientSecret and
             applications.application_type = :applicationType
         group by apis.api_identifier, permissions.permission_identifier`;
-        const qResult = await sequelize.query(query, { 
-            replacements: { clientId, clientSecret, applicationType: 'M2M'},
+        const qResult = await sequelize.query(query, {
+            replacements: { clientId, clientSecret, applicationType: 'M2M' },
             type: sequelize.QueryTypes.SELECT
         });
         /** Format data */
@@ -102,7 +104,7 @@ self.getApplicationPermissions = async (clientId, clientSecret) => {
             result[api_identifier].push(permission_identifier);
         });
         return result;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -111,7 +113,7 @@ self.getApplicationPermissions = async (clientId, clientSecret) => {
 self.getPermissionById = async (id) => {
     try {
         return await Permission.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -124,7 +126,7 @@ self.deletePermissionById = async (id) => {
                 permission_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

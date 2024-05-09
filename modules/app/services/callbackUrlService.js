@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { CallbackUrl } = require('../../../models');
 let self = {};
 
 /** Create callback url */
 self.createCallbackUrl = async (data) => {
     try {
+        data['callback_url_uuid'] = uuidv7();
         return await CallbackUrl.create(data);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateCallbackUrl = async (data) => {
     try {
         return await CallbackUrl.update(
             data,
-            { where: { callback_url_id: data['callback_url_id'] }}
+            { where: { callback_url_id: data['callback_url_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +29,7 @@ self.updateCallbackUrl = async (data) => {
 self.getCallbackUrlById = async (id) => {
     try {
         return await CallbackUrl.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -38,7 +40,7 @@ self.getCallbackUrlsByApplicationId = async (id) => {
         return await CallbackUrl.findAll({
             where: { application_id: id }
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -49,7 +51,7 @@ self.deleteCallbackUrlsByApplicationId = async (application_id) => {
         return await CallbackUrl.destroy({
             where: { application_id }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -62,7 +64,7 @@ self.deleteCallbackUrlById = async (id) => {
                 callback_url_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

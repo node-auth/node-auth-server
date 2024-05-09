@@ -9,7 +9,11 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ap-southeast-1
-  EKS_CLUSTER_NAME: node-app-cluster
+  EKS_CLUSTER_NAME: ssi-cluster-prod
+  EKS_DEPLOYMENT_NAME: ssi-node-auth-prod
+  ECR_REPOSITORY: ssi_node_auth_prod
+  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  ECR_IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build:
@@ -28,12 +32,22 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: $AWS_ACCESS_KEY_ID
+        aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+        aws-region: $AWS_REGION
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
 
     - name: Update kube config
       run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
     - name: Install Helm chart
-      run: helm upgrade --install node-app-default ./helm --values ./helm/values-prod.yaml
+      run: helm upgrade --install $EKS_DEPLOYMENT_NAME ./helm --values ./helm/values-prod.yaml

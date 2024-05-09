@@ -28,11 +28,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 /** CSRF protection */
-app.use(csrfProtection(process.env.CSRF_SECRET));
-app.get("/csrf-token", (req, res) => {
-    const csrfToken = req.csrfProtection.generateToken();
-    res.json({ csrfToken });
-});
+// app.use(csrfProtection(process.env.CSRF_SECRET));
+// app.get("/csrf-token", (req, res) => {
+//     const csrfToken = req.csrfProtection.generateToken();
+//     res.json({ csrfToken });
+// });
 
 /** XSS protection */
 app.use(helmet());
@@ -46,8 +46,8 @@ app.use(cors({ origin: '*' }));
 /** File upload */
 app.use(fileUpload({
     createParentPath: true,
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
 }));
 
 /** Modules */
@@ -55,4 +55,4 @@ require('./routes')(app);
 
 // LISTENER
 const port = process.env.PORT || 4000;
-app.listen(port, () => { console.log("App started at port ", port)});
+app.listen(port, () => { console.log("App started at port ", port) });

@@ -33,8 +33,8 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
         /** Organizations */
         const orgData = req.body['organizations'];
-        for(let i = 0; i < orgData.length; i++) {
-            if(orgData[i]['organization_id'] == 0) {
+        for (let i = 0; i < orgData.length; i++) {
+            if (orgData[i]['organization_id'] == 0) {
                 const dataToInsert = JSON.parse(JSON.stringify(orgData[i]));
                 delete dataToInsert['organization_id'];
                 delete dataToInsert['organization_code'];
@@ -46,11 +46,11 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 await organizationService.updateOrganization(orgData[i]);
             }
         }
-    
+
         /** Api */
         const apiData = req.body['apis'];
-        for(let i = 0; i < apiData.length; i++) {
-            if(apiData[i]['api_id'] == 0) {
+        for (let i = 0; i < apiData.length; i++) {
+            if (apiData[i]['api_id'] == 0) {
                 /** data for insert */
                 const dataToInsert = JSON.parse(JSON.stringify(apiData[i]));
                 const permissionsToData = JSON.parse(JSON.stringify(apiData[i]['permissions']));
@@ -66,16 +66,16 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Update response */
                 responseData['apis'][i]['api_id'] = qApiInsert['api_id'];
                 /** Create or update permission */
-                for(let j = 0; j < permissionsToData.length; j++) {
+                for (let j = 0; j < permissionsToData.length; j++) {
                     const permissionToInsert = JSON.parse(JSON.stringify(permissionsToData[j]));
-                    if(permissionToInsert['permission_id'] == 0) {
+                    if (permissionToInsert['permission_id'] == 0) {
                         delete permissionToInsert['permission_id'];
                         delete permissionToInsert['permission_code'];
                         const qPermissionInsert = await permissionService.createPermission(permissionToInsert);
                         responseData['apis'][i]['permissions'][j]['permission_id'] = qPermissionInsert['permission_id'];
                         /** Create api permission if do not exist */
                         const qApiPermission = await apiPermissionService.getPermissionApiIdAndPermissionId(qApiInsert['api_id'], qPermissionInsert['permission_id']);
-                        if(!qApiPermission) {
+                        if (!qApiPermission) {
                             await apiPermissionService.createApiPermission({
                                 api_id: qApiInsert['api_id'],
                                 permission_id: qPermissionInsert['permission_id']
@@ -86,7 +86,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                         await permissionService.updatePermission(permissionToInsert);
                         /** Create api permission if do not exist */
                         const qApiPermission = await apiPermissionService.getPermissionApiIdAndPermissionId(responseData['apis'][i]['api_id'], permissionToInsert['permission_id']);
-                        if(!qApiPermission) {
+                        if (!qApiPermission) {
                             await apiPermissionService.createApiPermission({
                                 api_id: responseData['apis'][i]['api_id'],
                                 permission_id: permissionToInsert['permission_id']
@@ -107,16 +107,16 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** update api */
                 await apiService.updateApi(dataToUpdate);
                 /** create or update permission */
-                for(let j = 0; j < permissionsToData.length; j++) {
+                for (let j = 0; j < permissionsToData.length; j++) {
                     const permissionToInsert = JSON.parse(JSON.stringify(permissionsToData[j]));
-                    if(permissionToInsert['permission_id'] == 0) {
+                    if (permissionToInsert['permission_id'] == 0) {
                         delete permissionToInsert['permission_id'];
                         delete permissionToInsert['permission_code'];
                         const qPermissionInsert = await permissionService.createPermission(permissionToInsert);
                         responseData['apis'][i]['permissions'][j]['permission_id'] = qPermissionInsert['permission_id'];
                         /** Create api permission if do not exist */
                         const qApiPermission = await apiPermissionService.getPermissionApiIdAndPermissionId(dataToUpdate['api_id'], qPermissionInsert['permission_id']);
-                        if(!qApiPermission) {
+                        if (!qApiPermission) {
                             await apiPermissionService.createApiPermission({
                                 api_id: dataToUpdate['api_id'],
                                 permission_id: qPermissionInsert['permission_id']
@@ -127,7 +127,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                         await permissionService.updatePermission(permissionToInsert);
                         /** Create api permission if do not exist */
                         const qApiPermission = await apiPermissionService.getPermissionApiIdAndPermissionId(dataToUpdate['api_id'], permissionToInsert['permission_id']);
-                        if(!qApiPermission) {
+                        if (!qApiPermission) {
                             await apiPermissionService.createApiPermission({
                                 api_id: dataToUpdate['api_id'],
                                 permission_id: permissionToInsert['permission_id']
@@ -140,8 +140,8 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
         /** Applications */
         const applicationData = req.body['applications'];
-        for(let i = 0; i < applicationData.length; i++) {
-            if(applicationData[i]['application_id'] == 0) {
+        for (let i = 0; i < applicationData.length; i++) {
+            if (applicationData[i]['application_id'] == 0) {
                 /** data for insert */
                 const dataToInsert = JSON.parse(JSON.stringify(applicationData[i]));
                 const permissionsData = JSON.parse(JSON.stringify(applicationData[i]['permissions']));
@@ -162,12 +162,12 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create application permissions */
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await applicationPermissionService.createApplicationPermission({
@@ -177,7 +177,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 }
 
                 /** Create application callback urls */
-                for(let j = 0; j < calbackUrlsData.length; j++) {
+                for (let j = 0; j < calbackUrlsData.length; j++) {
                     await callbackUrlService.createCallbackUrl({
                         url: calbackUrlsData[j]['url'],
                         application_id: qApplicationInsert['application_id'],
@@ -204,13 +204,13 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create application permissions */
                 await applicationPermissionService.deleteApplicationPermissionByApplicationId(dataToUpdate['application_id']);
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await applicationPermissionService.createApplicationPermission({
@@ -221,7 +221,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
                 /** Create application callback urls */
                 await callbackUrlService.deleteCallbackUrlsByApplicationId(dataToUpdate['application_id']);
-                for(let j = 0; j < calbackUrlsData.length; j++) {
+                for (let j = 0; j < calbackUrlsData.length; j++) {
                     await callbackUrlService.createCallbackUrl({
                         url: calbackUrlsData[j]['url'],
                         application_id: dataToUpdate['application_id'],
@@ -233,8 +233,8 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
         /** Roles */
         const roleData = req.body['roles'];
-        for(let i = 0; i < roleData.length; i++) {
-            if(roleData[i]['role_id'] == 0) {
+        for (let i = 0; i < roleData.length; i++) {
+            if (roleData[i]['role_id'] == 0) {
                 /** data for insert */
                 const dataToInsert = JSON.parse(JSON.stringify(roleData[i]));
                 const permissionsData = JSON.parse(JSON.stringify(roleData[i]['permissions']));
@@ -253,12 +253,12 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create role permissions */
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await rolePermissionService.createRolePermission({
@@ -284,13 +284,13 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create role permissions */
                 await rolePermissionService.deleteRolePermissionByRoleId(dataToUpdate['role_id']);
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await rolePermissionService.createRolePermission({
@@ -303,8 +303,8 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
         /** Users */
         const userData = req.body['users'];
-        for(let i = 0; i < userData.length; i++) {
-            if(userData[i]['user_id'] == 0) {
+        for (let i = 0; i < userData.length; i++) {
+            if (userData[i]['user_id'] == 0) {
                 /** data for insert */
                 const dataToInsert = JSON.parse(JSON.stringify(userData[i]));
                 const rolesData = JSON.parse(JSON.stringify(userData[i]['roles']));
@@ -335,7 +335,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 const roleDataFromJSON = JSON.parse(JSON.stringify(responseData['roles']));
 
                 /** Create user roles */
-                for(let j = 0; j < rolesData.length; j++) {
+                for (let j = 0; j < rolesData.length; j++) {
                     const roleIndex = roleDataFromJSON.findIndex(item => item['role_code'] == rolesData[j]);
                     const roleCurrentData = roleDataFromJSON[roleIndex];
                     await userRoleService.createUserRole({
@@ -347,12 +347,12 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create user permissions */
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await userPermissionService.createUserPermission({
@@ -391,7 +391,7 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
 
                 /** Create user roles */
                 await userRoleService.deleteUserRoleByUserId(dataToUpdate['user_id']);
-                for(let j = 0; j < rolesData.length; j++) {
+                for (let j = 0; j < rolesData.length; j++) {
                     const roleIndex = roleDataFromJSON.findIndex(item => item['role_code'] == rolesData[j]);
                     const roleCurrentData = roleDataFromJSON[roleIndex];
                     await userRoleService.createUserRole({
@@ -403,13 +403,13 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 /** Get api permissions */
                 const apiPermissionJSON = JSON.parse(JSON.stringify(responseData['apis']));
                 let apiPermissionData = [];
-                for(let j = 0; j < apiPermissionJSON.length; j++) {
+                for (let j = 0; j < apiPermissionJSON.length; j++) {
                     apiPermissionData = [...apiPermissionData, ...apiPermissionJSON[j]['permissions']]
                 }
 
                 /** Create user permissions */
                 await userPermissionService.deleteUserPermissionByUserId(dataToUpdate['user_id']);
-                for(let j = 0; j < permissionsData.length; j++) {
+                for (let j = 0; j < permissionsData.length; j++) {
                     const apiPermissionIndex = apiPermissionData.findIndex(item => item['permission_code'] == permissionsData[j]);
                     const apiPermissionCurrentData = apiPermissionData[apiPermissionIndex];
                     await userPermissionService.createUserPermission({
@@ -419,10 +419,10 @@ router.post('/createOrUpdateAPI', validateAPIKEY, async (req, res) => {
                 }
             }
         }
-        
+
         /** Response */
         res.send(responseData);
-    } catch(err) {
+    } catch (err) {
         console.log(err);
         res.send("ERROR");
     }

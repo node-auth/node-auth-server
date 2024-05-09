@@ -1,12 +1,14 @@
 const { Op } = require('sequelize');
+const { uuidv7 } = require("uuidv7");
 const { User } = require('../../../models');
 let self = {};
 
 /** Create user */
-self.createUser = async (userData) => {
+self.createUser = async (data) => {
     try {
-        return await User.create(userData);
-    } catch(err) {
+        data['user_uuid'] = uuidv7();
+        return await User.create(data);
+    } catch (err) {
         throw err;
     }
 }
@@ -16,9 +18,9 @@ self.updateUser = async (data) => {
     try {
         return await User.update(
             data,
-            { where: { user_id: data['user_id'] }}
+            { where: { user_id: data['user_id'] } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -43,11 +45,11 @@ self.getUsers = async (searchKey = '', isActive) => {
                             [Op.like]: `%${searchKey}%`
                         }
                     },
-                    isActive == null ? {} : {is_active: isActive}
+                    isActive == null ? {} : { is_active: isActive }
                 ]
             },
         });
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -56,7 +58,7 @@ self.getUsers = async (searchKey = '', isActive) => {
 self.getUserById = async (id) => {
     try {
         return await User.findByPk(id);
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -64,8 +66,8 @@ self.getUserById = async (id) => {
 /** Get user by email */
 self.getUserByEmail = async (email) => {
     try {
-        return await User.findOne({where: { email }});
-    } catch(err) {
+        return await User.findOne({ where: { email } });
+    } catch (err) {
         throw err;
     }
 }
@@ -73,8 +75,34 @@ self.getUserByEmail = async (email) => {
 /** Get user by phone */
 self.getUserByPhone = async (phone) => {
     try {
-        return await User.findOne({where: { phone }});
-    } catch(err) {
+        return await User.findOne({ where: { phone } });
+    } catch (err) {
+        throw err;
+    }
+}
+
+/** Get user by login username */
+self.getUserByLoginUsername = async (username) => {
+    try {
+        return await User.findOne({
+            where: {
+                [Op.or]: [
+                    { username: username },
+                    { email: username },
+                    { phone: username }
+                ]
+            }
+        });
+    } catch (err) {
+        throw err;
+    }
+}
+
+/** Get user by phone */
+self.getUserByPhone = async (phone) => {
+    try {
+        return await User.findOne({ where: { phone } });
+    } catch (err) {
         throw err;
     }
 }
@@ -84,9 +112,9 @@ self.verifyUserEmail = async (user_id) => {
     try {
         return await User.update(
             { is_email_verified: true },
-            { where: { user_id }}
+            { where: { user_id } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -96,9 +124,9 @@ self.verifyUserPhone = async (user_id) => {
     try {
         return await User.update(
             { is_phone_verified: true },
-            { where: { user_id }}
+            { where: { user_id } }
         );
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -111,7 +139,7 @@ self.deleteUserById = async (id) => {
                 user_id: id
             }
         })
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

@@ -7,16 +7,17 @@ const passwordSchema = Joi.string()
     .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/)
     .required();
 const registrationSchema = Joi.object({
-    username: Joi.string().required(),
-    first_name: Joi.string().required(),
-    middle_name: Joi.string().optional(),
-    last_name: Joi.string().required(),
-    nickname: Joi.string().optional(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().optional(),
+    username: Joi.string().allow(null).optional(),
+    full_name: Joi.string().allow(null).optional(),
+    first_name: Joi.string().allow(null).optional(),
+    middle_name: Joi.string().allow(null).optional(),
+    last_name: Joi.string().allow(null).optional(),
+    nickname: Joi.string().allow(null).optional(),
+    email: Joi.string().email().allow(null).optional(),
+    phone: Joi.string().allow(null).optional(),
     birthdate: Joi.date().iso().optional(),
     address: Joi.string().allow(null).optional(),
-    gender: Joi.string().valid('Male', 'Female').optional(),
+    gender: Joi.string().valid('Male', 'Female', 'Non-Binary', 'Prefer not to say').optional(),
     extended_info: Joi.object().optional(),
     password: passwordSchema,
     confirm_password: Joi.string().valid(Joi.ref('password')).required(),
@@ -32,6 +33,22 @@ const loginSchema = Joi.object({
 });
 self.validateLoginSchema = (data) => {
     return loginSchema.validate(data);
+}
+
+/** Email verification */
+const emailVerification = Joi.object({
+    email: Joi.string().email().required()
+});
+self.validateEmailVerificationSchema = (data) => {
+    return emailVerification.validate(data);
+}
+
+/** Phone verification */
+const phoneVerification = Joi.object({
+    phone: Joi.string().required()
+});
+self.validatePhoneVerificationSchema = (data) => {
+    return phoneVerification.validate(data);
 }
 
 /** Verify email */

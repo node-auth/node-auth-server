@@ -5,19 +5,18 @@ module.exports = {
     /** Add extensions */
     await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     /** Create table */
-    await queryInterface.createTable('application_permissions', {
-      application_permission_id: {
+    await queryInterface.createTable('role_permissions', {
+      role_permission_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      application_permission_uuid: {
+      role_permission_uuid: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false
       },
-      application_id: {
+      role_id: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
@@ -41,33 +40,40 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: true
+      },
+      metadata: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+        defaultValue: {
+          version: 0
+        }
       }
     });
     /** Add indexes reference */
-    await queryInterface.addIndex('application_permissions', ['application_permission_uuid'], {
-      name: 'app_permissions_app_permission_uuid_idx',
+    await queryInterface.addIndex('role_permissions', ['role_permission_uuid'], {
+      name: 'role_permissions_permission_uuid_idx',
       unique: true
     });
-    await queryInterface.addIndex('application_permissions', ['application_id'], {
-      name: 'app_permissions_application_id_idx'
+    await queryInterface.addIndex('role_permissions', ['role_id'], {
+      name: 'role_permissions_role_id_idx'
     });
-    await queryInterface.addIndex('application_permissions', ['permission_id'], {
-      name: 'app_permissions_permission_id_idx'
+    await queryInterface.addIndex('role_permissions', ['permission_id'], {
+      name: 'role_permissions_permission_id_idx'
     });
     /** Add foreign key constraints */
-    await queryInterface.addConstraint('application_permissions', {
-      name: 'app_permissions_appplication_id_fk',
-      fields: ['application_id'],
+    await queryInterface.addConstraint('role_permissions', {
+      name: 'role_permissions_role_id_fk',
+      fields: ['role_id'],
       type: 'foreign key',
       references: {
-        table: 'applications',
-        field: 'application_id'
+        table: 'roles',
+        field: 'role_id'
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    await queryInterface.addConstraint('application_permissions', {
-      name: 'app_permissions_permission_id_fk',
+    await queryInterface.addConstraint('role_permissions', {
+      name: 'role_permissions_permission_id_fk',
       fields: ['permission_id'],
       type: 'foreign key',
       references: {
@@ -77,8 +83,8 @@ module.exports = {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    await queryInterface.addConstraint('application_permissions', {
-      name: 'app_permissions_created_by_fk',
+    await queryInterface.addConstraint('role_permissions', {
+      name: 'role_permissions_created_by_fk',
       fields: ['created_by'],
       type: 'foreign key',
       references: {
@@ -88,8 +94,8 @@ module.exports = {
       onUpdate: 'SET NULL',
       onDelete: 'SET NULL'
     });
-    await queryInterface.addConstraint('application_permissions', {
-      name: 'app_permissions_updated_by_fk',
+    await queryInterface.addConstraint('role_permissions', {
+      name: 'role_permissions_updated_by_fk',
       fields: ['updated_by'],
       type: 'foreign key',
       references: {
@@ -102,15 +108,15 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     /** Remove the foreign key constraints */
-    await queryInterface.removeConstraint('application_permissions', 'app_permissions_appplication_id_fk');
-    await queryInterface.removeConstraint('application_permissions', 'app_permissions_permission_id_fk');
-    await queryInterface.removeConstraint('application_permissions', 'app_permissions_created_by_fk');
-    await queryInterface.removeConstraint('application_permissions', 'app_permissions_updated_by_fk');
+    await queryInterface.removeConstraint('role_permissions', 'role_permissions_role_id_fk');
+    await queryInterface.removeConstraint('role_permissions', 'role_permissions_permission_id_fk');
+    await queryInterface.removeConstraint('role_permissions', 'role_permissions_created_by_fk');
+    await queryInterface.removeConstraint('role_permissions', 'role_permissions_updated_by_fk');
     /** Remove indexes */
-    await queryInterface.removeIndex('application_permissions', 'app_permissions_app_permission_uuid_idx');
-    await queryInterface.removeIndex('application_permissions', 'app_permissions_application_id_idx');
-    await queryInterface.removeIndex('application_permissions', 'app_permissions_permission_id_idx');
+    await queryInterface.removeIndex('role_permissions', 'role_permissions_permission_uuid_idx');
+    await queryInterface.removeIndex('role_permissions', 'role_permissions_role_id_idx');
+    await queryInterface.removeIndex('role_permissions', 'role_permissions_permission_id_idx');
     /** Drop table */
-    await queryInterface.dropTable('application_permissions');
+    await queryInterface.dropTable('role_permissions');
   }
 };
